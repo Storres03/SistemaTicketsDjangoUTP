@@ -23,7 +23,7 @@
 							<li>
 								<a href="#" class="icon solid fa-angle-down">Servicios</a>
 								<ul>
-									<li><a href="generic.html">Tickets</a></li>
+                                    <li><a href="{% url 'tickets:list' %}">Tickets</a></li>
 									{% comment %} <li><a href="contact.html">Contact</a></li>
 									<li><a href="elements.html">Elements</a></li> {% endcomment %}
 									{% comment %} <li>
@@ -37,7 +37,8 @@
 									</li> {% endcomment %}
 								</ul>
 							</li>
-							<li><a href="#" class="button">Sign Up</a></li>
+                            <!-- Botón de acceso rápido a la gestión de tickets -->
+                            <li><a href="{% url 'tickets:list' %}" class="button">Gestionar Tickets</a></li>
 						</ul>
 					</nav>
 				</header>

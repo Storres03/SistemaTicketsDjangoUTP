@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
+    'tickets',  # Nueva aplicación para la gestión de tickets
 ]
 
 MIDDLEWARE = [

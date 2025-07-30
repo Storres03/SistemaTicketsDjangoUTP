@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Tickets</title>
+    <!-- Reutilizamos la hoja de estilos principal para mantener coherencia visual -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        /* Estilos adicionales para la tabla y formulario de tickets */
+        .ticket-container {
+            width: 90%;
+            margin: 2rem auto;
+        }
+        .ticket-container h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .ticket-form {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+        .ticket-form h2 {
+            margin-bottom: 1rem;
+        }
+        .ticket-form input[type="text"],
+        .ticket-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .ticket-form input[type="submit"] {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #5c9ded;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .ticket-form input[type="submit"]:hover {
+            background: #4387d6;
+        }
+        table.ticket-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.ticket-table th,
+        table.ticket-table td {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table.ticket-table th {
+            background: #f2f2f2;
+        }
+        a.attend-link {
+            color: #2d7cff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a.attend-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <h1>Gestión de Tickets</h1>
+        <p><a href="{% url 'index' %}" class="button">Volver a Inicio</a></p>
+        {% if user.is_authenticated %}
+            <div class="ticket-form">
+                <h2>Crear nuevo ticket</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Crear Ticket">
+                </form>
+            </div>
+            <h2>Lista de tickets</h2>
+            <table class="ticket-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Asignado a</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.id }}</td>
+                        <td>{{ ticket.title }}</td>
+                        <td>{{ ticket.description|linebreaksbr }}</td>
+                        <td>{{ ticket.get_status_display }}</td>
+                        <td>{% if ticket.assigned_to %}{{ ticket.assigned_to.username }}{% else %}-{% endif %}</td>
+                        <td>
+                            {% if ticket.status == 'pendiente' %}
+                                <a href="{% url 'tickets:attend' ticket.id %}" class="attend-link">Marcar como atendido</a>
+                            {% else %}
+                                Atendido
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">No hay tickets registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Debe iniciar sesión para gestionar tickets.</p>
+            <p><a href="{% url 'admin:login' %}">Iniciar sesión</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>
