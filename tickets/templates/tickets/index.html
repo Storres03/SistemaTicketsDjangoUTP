@@ -74,14 +74,14 @@
         <p><a href="{% url 'index' %}" class="button">Volver a Inicio</a></p>
         {% if user.is_authenticated %}
             {% if form %}
-            <div class="ticket-form">
-                <h2>Crear nuevo ticket</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <input type="submit" value="Crear Ticket">
-                </form>
-            </div>
+                <div class="ticket-form">
+                    <h2>Crear nuevo ticket</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="Crear Ticket">
+                    </form>
+                </div>
             {% endif %}
             <h2>Lista de tickets</h2>
             <table class="ticket-table">
@@ -125,6 +125,9 @@
         {% else %}
             <p>Debe iniciar sesión para gestionar tickets.</p>
             <p><a href="{% url 'admin:login' %}">Iniciar sesión</a></p>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Cerrar sesión</a>
         {% endif %}
     </div>
 </body>
