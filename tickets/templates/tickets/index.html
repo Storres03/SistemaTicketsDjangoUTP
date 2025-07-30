@@ -73,6 +73,7 @@
         <h1>Gestión de Tickets</h1>
         <p><a href="{% url 'index' %}" class="button">Volver a Inicio</a></p>
         {% if user.is_authenticated %}
+            {% if form %}
             <div class="ticket-form">
                 <h2>Crear nuevo ticket</h2>
                 <form method="post">
@@ -81,6 +82,7 @@
                     <input type="submit" value="Crear Ticket">
                 </form>
             </div>
+            {% endif %}
             <h2>Lista de tickets</h2>
             <table class="ticket-table">
                 <thead>
@@ -103,7 +105,11 @@
                         <td>{% if ticket.assigned_to %}{{ ticket.assigned_to.username }}{% else %}-{% endif %}</td>
                         <td>
                             {% if ticket.status == 'pendiente' %}
-                                <a href="{% url 'tickets:attend' ticket.id %}" class="attend-link">Marcar como atendido</a>
+                                {% if is_userTec %}
+                                    <a href="{% url 'tickets:attend' ticket.id %}" class="attend-link">Marcar como atendido</a>
+                                {% else %}
+                                    Pendiente
+                                {% endif %}
                             {% else %}
                                 Atendido
                             {% endif %}
